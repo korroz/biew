@@ -13,7 +13,9 @@ app.get('/api/media', function (req, res) {
         }));
     })
     .then(function (fileInfo) {
-        res.json(fileInfo);
+        res.json(fileInfo.filter(function (fi) {
+            return fi.stat.isFile();
+        }));
     }, function (err) {
         res.status(500).end();
     });
