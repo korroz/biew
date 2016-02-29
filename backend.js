@@ -6,13 +6,15 @@ var micromatch = require('micromatch');
 
 var app = express();
 
+// Temporary, the idea is that the server is started the directory with media from cmd line.
+process.chdir(path.join(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'], 'Pictures'));
+
 app.get('/api/media', function (req, res) {
     var ls = q.denodeify(fs.readdir);
     var stat = q.denodeify(fs.stat);
-    var dirPath = path.join(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'], 'Pictures');
-    ls(dirPath).then(function (files) {
+    ls('./').then(function (files) {
         return q.all(micromatch(files, '*.{png,jpg,jpeg,mp4,webm,gif}').map(function (file) {
-            return stat(path.join(dirPath, file)).then(function (st) { return { name: file, stat: st }; });
+            return stat(file).then(function (st) { return { name: file, stat: st }; });
         }));
     })
     .then(function (fileInfo) {
@@ -23,7 +25,7 @@ app.get('/api/media', function (req, res) {
         res.status(500).json(err);
     });
 });
-app.use(express.static('frontend'));
+app.use(express.static(path.join(__dirname, 'frontend')));
 
 app.listen(3434, function () {
     console.log('Backend started, listening on port 3434');
