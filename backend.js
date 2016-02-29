@@ -11,16 +11,16 @@ process.chdir(path.join(process.env[(process.platform == 'win32') ? 'USERPROFILE
 
 var ls = q.denodeify(fs.readdir);
 var stat = q.denodeify(fs.stat);
-var media = ls('./').then(function (files) {
-    return q.all(micromatch(files, '*.{png,jpg,jpeg,mp4,webm,gif}').map(function (file) {
-        return stat(file).then(function (st) { return { name: file, stat: st }; });
-    }));
-})
-.then(function (files) {
-    return files.filter(function (fi) {
-        return fi.stat.isFile();
+var media = ls('.')
+    .then(function (files) { return micromatch(files, '*.{png,jpg,jpeg,mp4,webm,gif}');})
+    .then(function (files) {
+        return q.all(files.map(function (file) {
+            return stat(file).then(function (st) { return { name: file, stat: st }; });
+        }));
+    })
+    .then(function (files) {
+        return files.filter(function (fi) { return fi.stat.isFile(); });
     });
-});
 
 app.get('/api/media', function (req, res) {
     media.then(function (files) {
@@ -38,7 +38,7 @@ app.use('/api/file', function (req, res, next) {
             res.status(404).end();
     });
 });
-app.use('/api/file', express.static('./'));
+app.use('/api/file', express.static('.'));
 app.use(express.static(path.join(__dirname, 'frontend')));
 
 app.listen(3434, function () {
