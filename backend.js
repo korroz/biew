@@ -39,7 +39,7 @@ app.use('/api/file', function (req, res, next) {
     });
 });
 app.use('/api/file', express.static('.'));
-app.use(express.static(path.join(__dirname, 'frontend')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 app.listen(3434, function () {
     console.log('biew running..');
