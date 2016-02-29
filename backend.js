@@ -42,5 +42,5 @@ app.use('/api/file', express.static('.'));
 app.use(express.static(path.join(__dirname, 'frontend')));
 
 app.listen(3434, function () {
-    console.log('Backend started, listening on port 3434');
+    console.log('biew running..');
 });
