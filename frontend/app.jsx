@@ -1,8 +1,9 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var ImgView = require('./ImgView.component.jsx');
+var Visualizer = require('./Visualizer.component.jsx');
+var CursorControls = require('./CursorControls.component.jsx');
 
 ReactDOM.render(
-  <ImgView file="" />,
+  <div><Visualizer /><CursorControls /></div>,
   document.getElementById('bootstrap')
 );
