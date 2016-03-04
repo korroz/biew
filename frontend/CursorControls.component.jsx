@@ -4,9 +4,9 @@ var dispatcher = require('./dispatcher');
 module.exports = React.createClass({
     render: function () {
         return (
-            <div>
-                <button onClick={this.clickPrev}>Previous</button>
-                <button onClick={this.clickNext}>Next</button>
+            <div className="buttons">
+                <button className="button-primary" onClick={this.clickPrev}>Previous</button>
+                <button className="button-primary" onClick={this.clickNext}>Next</button>
             </div>
         );
     },

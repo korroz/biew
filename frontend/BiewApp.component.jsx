@@ -21,7 +21,14 @@ module.exports = React.createClass({
     render: function () {
         if (!this.state.hasMedia)
             return <div>No media</div>;
-        return <div><Visualizer /><CursorControls /></div>;
+        return (
+            <div className="viewer">
+                <Visualizer />
+                <div className="controls">
+                    <CursorControls />
+                </div>
+            </div>
+        );
     },
     onMediaChange: function () {
         this.setState({ hasMedia: mediaStore.hasMedia() });
