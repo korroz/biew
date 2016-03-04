@@ -4,8 +4,8 @@
   "description": "Browser media viewer",
   "main": "backend.js",
   "scripts": {
-    "build": "browserify -t [ babelify --presets [ react ] ] -o dist/app.js frontend/app.jsx",
-    "watch": "watchify -t [ babelify --presets [ react ] ] -o dist/app.js frontend/app.jsx",
+    "build": "gulp build",
+    "watch": "gulp watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "korroz",
@@ -21,8 +21,11 @@
     "babelify": "^7.2.0",
     "browserify": "^13.0.0",
     "flux": "^2.1.1",
+    "gulp": "^3.9.1",
+    "gulp-util": "^3.0.7",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
+    "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0",
     "xhr": "^2.2.0"
   }
