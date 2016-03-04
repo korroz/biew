@@ -5,6 +5,7 @@
   "main": "backend.js",
   "scripts": {
     "build": "browserify -t [ babelify --presets [ react ] ] -o dist/app.js frontend/app.jsx",
+    "watch": "watchify -t [ babelify --presets [ react ] ] -o dist/app.js frontend/app.jsx",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "korroz",
