@@ -1,5 +1,6 @@
 var EventEmitter = require('events');
 var util = require('util');
+var api = require('./api');
 
 function MediaStore() {
     EventEmitter.call(this);
@@ -10,6 +11,16 @@ function MediaStore() {
     self.onChange = onChange;
 
     var _media = [];
+
+    activate();
+
+    function activate() {
+        api.getMedia()
+            .then(function (media) {
+                _media = media;
+                self.emit('change');
+            });
+    }
 
     function get() {
         return _media;
@@ -23,7 +34,7 @@ function MediaStore() {
         self.on('change', listener);
         return function () {
             self.removeListener('change', listener);
-        }
+        };
     }
 }
 util.inherits(MediaStore, EventEmitter);
