@@ -23,17 +23,20 @@ var bify = browserify({
     packageCache: {},
     transform: [babelify.configure({ presets: ['react'] })]
 });
+var failOnError = true;
 function build() {
     var stream = bify.bundle()
         .on('error', function (err) {
             gutil.log('Browserify', gutil.colors.red(err.name), '-', err.message);
             stream.end();
+            if (failOnError) process.exit(1);
         })
         .pipe(source('app.js'))
         .pipe(gulp.dest('dist'));
     return stream;
 }
 function watch() {
+    failOnError = false;
     gulp.watch(['frontend/*.{html,css}'], ['move-index', 'move-styles']);
     function start() { gulp.start('build'); }
     bify.plugin(watchify);

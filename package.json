@@ -7,7 +7,8 @@
     "biew": "bin/biew.js"
   },
   "scripts": {
-    "build": "gulp build",
+    "prepublish": "npm run build",
+    "build": "gulp",
     "watch": "gulp watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,8 +19,7 @@
     "express": "^4.13.4",
     "micromatch": "^2.3.7",
     "open": "0.0.5",
-    "q": "^1.4.1",
-    "skeleton-css": "^2.0.4"
+    "q": "^1.4.1"
   },
   "devDependencies": {
     "babel-preset-react": "^6.5.0",
@@ -30,6 +30,7 @@
     "gulp-util": "^3.0.7",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
+    "skeleton-css": "^2.0.4",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0",
     "xhr": "^2.2.0"
