@@ -41,7 +41,7 @@ module.exports = function (options, callback) {
     app.use('/api/file', express.static('.'));
     app.use(express.static(path.join(__dirname, 'dist')));
 
-    app.listen(options.port, function () {
+    return app.listen(options.port, function () {
         console.log('biew running..');
         if (callback)
             callback();

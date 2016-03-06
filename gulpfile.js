@@ -4,6 +4,8 @@ var browserify = require('browserify');
 var watchify = require('watchify');
 var babelify = require('babelify');
 var source = require('vinyl-source-stream');
+var path = require('path');
+var biew = require('./backend');
 
 gulp.task('default', ['move', 'build']);
 gulp.task('move', ['move-index', 'move-skeleton', 'move-styles']);
@@ -12,6 +14,7 @@ gulp.task('move-skeleton', moveSkeleton);
 gulp.task('move-styles', moveStyles);
 gulp.task('build', build);
 gulp.task('watch', ['move'], watch);
+gulp.task('serve', serve);
 
 function moveIndex() { return gulp.src('frontend/index.html').pipe(gulp.dest('dist')); };
 function moveSkeleton() { return gulp.src(['node_modules/skeleton-css/*/*.{css,png}']).pipe(gulp.dest('dist')); };
@@ -42,5 +45,21 @@ function watch() {
     bify.plugin(watchify);
     bify.on('update', start);
     bify.on('log', function (msg) { gutil.log('Browserify', msg); });
+    start();
+}
+function serve() {
+    var server;
+    function start() {
+        server = biew({
+            port: 3434,
+            path: path.join(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'], 'Pictures')
+        }, function () {
+            // browser sync here I guess
+        });
+    };
+    gulp.watch(['backend.js'], function () {
+        gutil.log('backend changed');
+        server.close(start);
+    });
     start();
 }
