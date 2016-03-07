@@ -13,7 +13,14 @@ module.exports = function (options, callback) {
     .then(function (files) { return micromatch(files, '*.{png,jpg,jpeg,mp4,webm,gif}');})
     .then(function (files) {
         return q.all(files.map(function (file) {
-            return stat(path.join(options.path, file)).then(function (st) { return { name: file, stat: st }; });
+            var mediaType;
+
+            if (micromatch.isMatch(file, '*.{png,jpg,jpeg,gif}'))
+                mediaType = 'img';
+            else if (micromatch.isMatch(file, '*.{mp4,webm}'))
+                mediaType = 'vid';
+
+            return stat(path.join(options.path, file)).then(function (st) { return { name: file, media: mediaType, stat: st }; });
         }));
     })
     .then(function (files) {
