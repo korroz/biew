@@ -20,7 +20,7 @@ module.exports = function (options, callback) {
             else if (micromatch.isMatch(file, '*.{mp4,webm}'))
                 mediaType = 'vid';
 
-            return stat(path.join(options.path, file)).then(function (st) { return { name: file, media: mediaType, stat: st }; });
+            return stat(path.join(options.path, file)).then(function (st) { return { name: file, type: mediaType, stat: st }; });
         }));
     })
     .then(function (files) {
