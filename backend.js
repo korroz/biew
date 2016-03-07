@@ -7,15 +7,13 @@ var micromatch = require('micromatch');
 module.exports = function (options, callback) {
     var app = express();
 
-    process.chdir(options.path);
-
     var ls = q.denodeify(fs.readdir);
     var stat = q.denodeify(fs.stat);
-    var media = ls('.')
+    var media = ls(options.path)
     .then(function (files) { return micromatch(files, '*.{png,jpg,jpeg,mp4,webm,gif}');})
     .then(function (files) {
         return q.all(files.map(function (file) {
-            return stat(file).then(function (st) { return { name: file, stat: st }; });
+            return stat(path.join(options.path, file)).then(function (st) { return { name: file, stat: st }; });
         }));
     })
     .then(function (files) {
@@ -38,7 +36,7 @@ module.exports = function (options, callback) {
                 res.status(404).end();
         });
     });
-    app.use('/api/file', express.static('.'));
+    app.use('/api/file', express.static(options.path));
     app.use(express.static(path.join(__dirname, 'dist')));
 
     return app.listen(options.port, function () {

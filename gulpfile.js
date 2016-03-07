@@ -5,7 +5,7 @@ var watchify = require('watchify');
 var babelify = require('babelify');
 var source = require('vinyl-source-stream');
 var path = require('path');
-var biew = require('./backend');
+var bs = require('browser-sync').create();
 
 gulp.task('default', ['move', 'build']);
 gulp.task('move', ['move-index', 'move-skeleton', 'move-styles']);
@@ -13,12 +13,14 @@ gulp.task('move-index', moveIndex);
 gulp.task('move-skeleton', moveSkeleton);
 gulp.task('move-styles', moveStyles);
 gulp.task('build', build);
-gulp.task('watch', ['move'], watch);
+gulp.task('watch:noserve', ['move', 'browser-sync'], watch);
+gulp.task('watch', ['move', 'serve', 'browser-sync'], watch);
 gulp.task('serve', serve);
+gulp.task('browser-sync', browserSync);
 
-function moveIndex() { return gulp.src('frontend/index.html').pipe(gulp.dest('dist')); };
-function moveSkeleton() { return gulp.src(['node_modules/skeleton-css/*/*.{css,png}']).pipe(gulp.dest('dist')); };
-function moveStyles() { return gulp.src(['frontend/styles.css']).pipe(gulp.dest('dist/css')); }
+function moveIndex() { return gulp.src('frontend/index.html').pipe(gulp.dest('dist')).pipe(bs.stream()); };
+function moveSkeleton() { return gulp.src(['node_modules/skeleton-css/*/*.{css,png}']).pipe(gulp.dest('dist')).pipe(bs.stream()); };
+function moveStyles() { return gulp.src(['frontend/styles.css']).pipe(gulp.dest('dist/css')).pipe(bs.stream()); }
 
 var bify = browserify({
     entries: ['frontend/app.jsx'],
@@ -35,12 +37,14 @@ function build() {
             if (failOnError) process.exit(1);
         })
         .pipe(source('app.js'))
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('dist'))
+        .pipe(bs.stream());
     return stream;
 }
 function watch() {
     failOnError = false;
-    gulp.watch(['frontend/*.{html,css}'], ['move-index', 'move-styles']);
+    gulp.watch(['frontend/*.html'], ['move-index']);
+    gulp.watch(['frontend/*.css'], ['move-styles']);
     function start() { gulp.start('build'); }
     bify.plugin(watchify);
     bify.on('update', start);
@@ -48,18 +52,26 @@ function watch() {
     start();
 }
 function serve() {
-    var server;
+    var server, biewId = path.resolve(__dirname, './backend.js'), restarting = false;
     function start() {
-        server = biew({
+        delete require.cache[biewId];   // Ensure biew isn't cached.
+        server = require('./backend.js')({
             port: 3434,
             path: path.join(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'], 'Pictures')
-        }, function () {
-            // browser sync here I guess
-        });
+        }, function () { restarting = false; });
     };
     gulp.watch(['backend.js'], function () {
-        gutil.log('backend changed');
-        server.close(start);
+        if (!restarting) {
+            restarting = true;
+            gutil.log('Backend changed, restarting biew server..');
+            server.close(start);
+        }
+        else gutil.log('Backend changed again.. but we are still restarting, please wait a (long) bit.');
     });
     start();
+}
+function browserSync(done) {
+    bs.init({
+        proxy: 'localhost:3434', open: false
+    }, done);
 }
