@@ -57,7 +57,7 @@ function serve() {
         delete require.cache[biewId];   // Ensure biew isn't cached.
         server = require('./backend.js')({
             port: 3434,
-            path: path.join(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'], 'Pictures')
+            path: 'media'
         }, function () { restarting = false; });
     };
     gulp.watch(['backend.js'], function () {
