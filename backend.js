@@ -9,18 +9,19 @@ module.exports = function (options, callback) {
 
     var ls = q.denodeify(fs.readdir);
     var stat = q.denodeify(fs.stat);
+    var mmopts = { nocase: true };
+    var fileMap = [
+        { mediaType: 'img', glob: '*.{png,jpg,jpeg,gif}' },
+        { mediaType: 'vid', glob: '*.{mp4,webm}' }
+    ];
+    var combinedGlob = fileMap.map(function (fm) { return fm.glob; });
     var media = ls(options.path)
-    .then(function (files) { return micromatch(files, '*.{png,jpg,jpeg,mp4,webm,gif}');})
+    .then(function (files) { return micromatch(files, combinedGlob, mmopts);})
     .then(function (files) {
         return q.all(files.map(function (file) {
-            var mediaType;
-
-            if (micromatch.isMatch(file, '*.{png,jpg,jpeg,gif}'))
-                mediaType = 'img';
-            else if (micromatch.isMatch(file, '*.{mp4,webm}'))
-                mediaType = 'vid';
-
-            return stat(path.join(options.path, file)).then(function (st) { return { name: file, type: mediaType, stat: st }; });
+            var mediaType = fileMap.find(function (fm) { return micromatch.isMatch(file, fm.glob, mmopts); }).mediaType;
+            return stat(path.join(options.path, file))
+                .then(function (st) { return { name: file, type: mediaType, stat: st }; });
         }));
     })
     .then(function (files) {
