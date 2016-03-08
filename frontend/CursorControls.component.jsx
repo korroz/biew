@@ -3,6 +3,13 @@ var actions = require('./actions');
 
 module.exports = React.createClass({
     displayName: 'CursorControls',
+    componentDidMount: function () {
+        Mousetrap.bind('left', this.clickPrev);
+        Mousetrap.bind('right', this.clickNext);
+    },
+    componentWillUnmount: function () {
+        Mousetrap.unbind(['left', 'right']);
+    },
     render: function () {
         return (
             <div className="buttons">
