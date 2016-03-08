@@ -1,7 +1,8 @@
 var React = require('react');
-var dispatcher = require('./dispatcher');
+var actions = require('./actions');
 
 module.exports = React.createClass({
+    displayName: 'CursorControls',
     render: function () {
         return (
             <div className="buttons">
@@ -10,10 +11,6 @@ module.exports = React.createClass({
             </div>
         );
     },
-    clickPrev: function () {
-        dispatcher.dispatch({ actionType: 'cursor:prev' });
-    },
-    clickNext: function () {
-        dispatcher.dispatch({ actionType: 'cursor:next' });
-    }
+    clickPrev: function () { actions.prevMedia(); },
+    clickNext: function () { actions.nextMedia(); }
 });

@@ -8,9 +8,10 @@ var path = require('path');
 var bs = require('browser-sync').create();
 
 gulp.task('default', ['move', 'build']);
-gulp.task('move', ['move-index', 'move-skeleton', 'move-styles']);
+gulp.task('move', ['move-index', 'move-skeleton', 'move-mousetrap', 'move-styles']);
 gulp.task('move-index', moveIndex);
 gulp.task('move-skeleton', moveSkeleton);
+gulp.task('move-mousetrap', moveMousetrap);
 gulp.task('move-styles', moveStyles);
 gulp.task('build', build);
 gulp.task('watch:noserve', ['move', 'browser-sync'], watch);
@@ -20,6 +21,7 @@ gulp.task('browser-sync', browserSync);
 
 function moveIndex() { return gulp.src('frontend/index.html').pipe(gulp.dest('dist')).pipe(bs.stream()); };
 function moveSkeleton() { return gulp.src(['node_modules/skeleton-css/*/*.{css,png}']).pipe(gulp.dest('dist')).pipe(bs.stream()); };
+function moveMousetrap() { return gulp.src(['node_modules/mousetrap/mousetrap.min.js']).pipe(gulp.dest('dist/js')); }
 function moveStyles() { return gulp.src(['frontend/styles.css']).pipe(gulp.dest('dist/css')).pipe(bs.stream()); }
 
 var bify = browserify({

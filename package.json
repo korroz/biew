@@ -29,6 +29,7 @@
     "flux": "^2.1.1",
     "gulp": "^3.9.1",
     "gulp-util": "^3.0.7",
+    "mousetrap": "^1.5.3",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "skeleton-css": "^2.0.4",
