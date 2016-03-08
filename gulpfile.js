@@ -58,7 +58,7 @@ function serve() {
         server = require('./backend.js')({
             port: 3434,
             path: 'media'
-        }, function () { restarting = false; });
+        }, function () { restarting = false; bs.reload(); });
     };
     gulp.watch(['backend.js'], function () {
         if (!restarting) {
