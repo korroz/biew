@@ -1,4 +1,15 @@
-body { background-color: #111; }
+body {
+    background-color: #222;
+    color: #eee
+}
+
+.no-media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+}
+.no-media i { margin: 10px; }
 
 .viewer {
     position: absolute;

@@ -7,10 +7,11 @@ function MediaStore() {
     var self = this;
 
     self.get = get;
+    self.getPath = getPath;
     self.hasMedia = hasMedia;
     self.onChange = onChange;
 
-    var _media = [];
+    var _media = { path: '', files: [] };
 
     activate();
 
@@ -23,11 +24,15 @@ function MediaStore() {
     }
 
     function get() {
-        return _media;
+        return _media.files;
+    }
+
+    function getPath() {
+        return _media.path;
     }
 
     function hasMedia() {
-        return !!_media && _media.length > 0;
+        return !!_media.files && _media.files.length > 0;
     }
 
     function onChange(listener) {

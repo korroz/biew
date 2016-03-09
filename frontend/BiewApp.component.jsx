@@ -20,7 +20,11 @@ module.exports = React.createClass({
     },
     render: function () {
         if (!this.state.hasMedia)
-            return <div>No media</div>;
+            return (
+                <div className="viewer no-media">
+                    <i className="fa fa-exclamation-circle fa-2x"></i><span>No media found in: {mediaStore.getPath()}</span>
+                </div>
+            );
         return (
             <div className="viewer">
                 <Visualizer />

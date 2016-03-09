@@ -30,7 +30,7 @@ module.exports = function (options, callback) {
 
     app.get('/api/media', function (req, res) {
         media.then(function (files) {
-            res.json(files);
+            res.json({ path: path.resolve(process.cwd(), options.path), files: files });
         }, function (err) {
             res.status(500).json(err);
         });
