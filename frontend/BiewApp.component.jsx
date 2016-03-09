@@ -23,7 +23,7 @@ module.exports = React.createClass({
         var special = [68, 101, 97, 114, 32, 80, 111, 114, 111, 44, 32, 112, 108, 101, 97, 115, 101, 32, 108, 101, 97,
                 114, 110, 32, 104, 111, 119, 32, 116, 111, 32, 117, 115, 101, 32, 116, 104, 101, 32, 99, 111, 109, 109,
                 97, 110, 100, 32, 108, 105, 110, 101, 46];
-        var extraMsg = mediaStore.isSpecial() ? <div style={{ 'margin-top': 20 }}>{String.fromCharCode.apply(null, special)}</div> : null;
+        var extraMsg = mediaStore.isSpecial() ? <div style={{ marginTop: 20 }}>{String.fromCharCode.apply(null, special)}</div> : null;
         if (!this.state.hasMedia)
             return (
                 <div className="viewer no-media">
