@@ -9,6 +9,7 @@ body { background-color: #111; }
 }
 
 .keep-aspect-maximize {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: contain;
