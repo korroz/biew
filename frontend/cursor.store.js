@@ -3,13 +3,16 @@ var util = require('util');
 var mediaStore = require('./media.store');
 var dispatcher = require('./dispatcher');
 
-var _currentIndex = 0;
 
 function CursorStore(dispatcher, mediaStore) {
     EventEmitter.call(this);
     var self = this;
 
+    var _currentIndex = 0;
+
     this.current = current;
+    this.position = position;
+    this.onChange = onChange;
     this.prev = prev;
     this.next = next;
 
@@ -27,6 +30,17 @@ function CursorStore(dispatcher, mediaStore) {
         var media = mediaStore.get();
         if (media)
             return media[_currentIndex];
+    }
+
+    function position() {
+        return { current: _currentIndex + 1, total: mediaStore.get().length };
+    }
+
+    function onChange(listener) {
+        self.on('change', listener);
+        return function () {
+            self.removeListener('change', listener);
+        };
     }
 
     function _changeBy(delta) {

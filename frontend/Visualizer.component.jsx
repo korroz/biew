@@ -9,10 +9,10 @@ module.exports = React.createClass({
         return { media: cursorStore.current() };
     },
     componentDidMount: function () {
-        cursorStore.on('change', this.getMedia);
+        this.mediaChangeListenerDeregister = cursorStore.onChange(this.getMedia);
     },
     componentWillUnmount: function () {
-        cursorStore.removeListener('change', this.getMedia);
+        this.mediaChangeListenerDeregister();
     },
     render: function () {
         if (this.state.media.type === 'vid')

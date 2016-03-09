@@ -1,6 +1,7 @@
 var React = require('react');
 var Visualizer = require('./Visualizer.component.jsx');
 var CursorControls = require('./CursorControls.component.jsx');
+var CurrentInfo = require('./CurrentInfo.component.jsx');
 var mediaStore = require('./media.store.js');
 
 module.exports = React.createClass({
@@ -33,6 +34,7 @@ module.exports = React.createClass({
         return (
             <div className="viewer">
                 <Visualizer />
+                <CurrentInfo />
                 <div className="controls">
                     <CursorControls />
                 </div>
