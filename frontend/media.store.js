@@ -9,6 +9,7 @@ function MediaStore() {
     self.get = get;
     self.getPath = getPath;
     self.hasMedia = hasMedia;
+    self.isSpecial = function () { return !!_media.isSpecial; }
     self.onChange = onChange;
 
     var _media = { path: '', files: [] };

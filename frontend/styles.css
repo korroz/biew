@@ -5,11 +5,12 @@ body {
 
 .no-media {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     font-size: 30px;
 }
-.no-media i { margin: 10px; }
+.no-media i { margin: 10px; vertical-align: middle; }
 
 .viewer {
     position: absolute;
