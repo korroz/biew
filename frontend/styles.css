@@ -4,7 +4,7 @@ body { background-color: #111; }
     position: absolute;
     top: 0;
     right: 0;
-    bottom: 60px;
+    bottom: 0;
     left: 0;
 }
 
@@ -14,18 +14,26 @@ body { background-color: #111; }
     object-fit: contain;
 }
 
-.controls {
+.controls .control {
     position: absolute;
-    bottom: -60px;
+    top: 0;
+    bottom: 0;
+    width: 130px;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    color: #333;
+    cursor: pointer;
+}
+.controls .prev-control {
     left: 0;
-    width: 100%;
+}
+.controls .next-control {
+    right: 0;
 }
 
-.controls .buttons {
-    margin: 0 auto;
-    width: 300px;
+.controls .control:hover {
+    opacity: 1;
+    background-color: hsla(360, 100%, 100%, 0.2);
 }
-.controls .buttons button {
-    margin: 10px;
-    width: 130px;
-}
+.controls .control i { margin: 0 auto; }
