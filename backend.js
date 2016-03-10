@@ -3,6 +3,7 @@ var fs = require('fs');
 var path = require('path');
 var q = require('q');
 var micromatch = require('micromatch');
+var _ = require('lodash');
 
 module.exports = function (options, callback) {
     var app = express();
@@ -19,7 +20,7 @@ module.exports = function (options, callback) {
     .then(function (files) { return micromatch(files, combinedGlob, mmopts);})
     .then(function (files) {
         return q.all(files.map(function (file) {
-            var mediaType = fileMap.find(function (fm) { return micromatch.isMatch(file, fm.glob, mmopts); }).mediaType;
+            var mediaType = _.find(fileMap, function (fm) { return micromatch.isMatch(file, fm.glob, mmopts); }).mediaType;
             return stat(path.join(options.path, file))
                 .then(function (st) { return { name: file, type: mediaType, stat: st }; });
         }));
