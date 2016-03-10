@@ -35,9 +35,7 @@ module.exports = React.createClass({
             <div className="viewer">
                 <Visualizer />
                 <CurrentInfo />
-                <div className="controls">
-                    <CursorControls />
-                </div>
+                <CursorControls />
             </div>
         );
     },

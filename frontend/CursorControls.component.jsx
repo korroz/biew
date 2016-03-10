@@ -6,9 +6,11 @@ module.exports = React.createClass({
     componentDidMount: function () {
         Mousetrap.bind('left', this.clickPrev);
         Mousetrap.bind('right', this.clickNext);
+        Mousetrap.bind('up', this.startSlide);
+        Mousetrap.bind('down', this.stopSlide);
     },
     componentWillUnmount: function () {
-        Mousetrap.unbind(['left', 'right']);
+        Mousetrap.unbind(['left', 'right', 'up', 'down']);
     },
     render: function () {
         return (
@@ -19,5 +21,7 @@ module.exports = React.createClass({
         );
     },
     clickPrev: function () { actions.prevMedia(); },
-    clickNext: function () { actions.nextMedia(); }
+    clickNext: function () { actions.nextMedia(); },
+    startSlide: function () { actions.startSlide(); },
+    stopSlide: function () { actions.stopSlide(); }
 });
