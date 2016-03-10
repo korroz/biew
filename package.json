@@ -2,6 +2,7 @@
   "name": "biew",
   "version": "0.4.0",
   "description": "A browser based media viewer for local files",
+  "homepage": "https://github.com/korroz/biew",
   "license": "MIT",
   "author": "korroz",
   "files": [
@@ -13,6 +14,7 @@
   "bin": {
     "biew": "bin/biew.js"
   },
+  "repository": "korroz/biew",
   "scripts": {
     "prepublish": "npm run build",
     "build": "gulp",
