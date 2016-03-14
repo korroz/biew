@@ -7,7 +7,7 @@ module.exports = React.createClass({
 
         if (this.props.file) {
             output = (
-                <video className="keep-aspect-maximize" src={'api/file/' + this.props.file} autoPlay loop controls>
+                <video className="keep-aspect-maximize" src={'api/file/' + this.props.file} autoPlay loop controls muted>
                     There should be a video playing here, but seems it doesn't work.
                 </video>
             );
