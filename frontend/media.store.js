@@ -1,10 +1,13 @@
-var EventEmitter = require('events');
-var util = require('util');
+var Rx = require('rx');
 var api = require('./api');
 
+module.exports = new MediaStore();
+
 function MediaStore() {
-    EventEmitter.call(this);
     var self = this;
+
+    var _changeSubject = new Rx.Subject();
+    var _media = { path: '', files: [] };
 
     self.get = get;
     self.getPath = getPath;
@@ -12,7 +15,6 @@ function MediaStore() {
     self.isSpecial = function () { return !!_media.isSpecial; }
     self.onChange = onChange;
 
-    var _media = { path: '', files: [] };
 
     activate();
 
@@ -20,7 +22,7 @@ function MediaStore() {
         api.getMedia()
             .then(function (media) {
                 _media = media;
-                self.emit('change');
+                _changeSubject.onNext();
             });
     }
 
@@ -37,12 +39,6 @@ function MediaStore() {
     }
 
     function onChange(listener) {
-        self.on('change', listener);
-        return function () {
-            self.removeListener('change', listener);
-        };
+        return _changeSubject.subscribe(listener);
     }
 }
-util.inherits(MediaStore, EventEmitter);
-
-module.exports = new MediaStore();

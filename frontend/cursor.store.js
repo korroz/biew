@@ -1,13 +1,13 @@
-var EventEmitter = require('events');
-var util = require('util');
+var Rx = require('rx');
 var mediaStore = require('./media.store');
 var dispatcher = require('./dispatcher');
 
+module.exports = new CursorStore(dispatcher, mediaStore);
 
 function CursorStore(dispatcher, mediaStore) {
-    EventEmitter.call(this);
     var self = this;
 
+    var _changeSubject = new Rx.Subject();
     var _currentIndex = 0;
 
     this.current = current;
@@ -37,10 +37,7 @@ function CursorStore(dispatcher, mediaStore) {
     }
 
     function onChange(listener) {
-        self.on('change', listener);
-        return function () {
-            self.removeListener('change', listener);
-        };
+        return _changeSubject.subscribe(listener);
     }
 
     function _changeBy(delta) {
@@ -53,7 +50,7 @@ function CursorStore(dispatcher, mediaStore) {
         else
             _currentIndex = newIndex;
 
-        self.emit('change');
+        _changeSubject.onNext();
     }
 
     function _actionHandler(payload) {
@@ -68,6 +65,3 @@ function CursorStore(dispatcher, mediaStore) {
         }
     }
 }
-util.inherits(CursorStore, EventEmitter);
-
-module.exports = new CursorStore(dispatcher, mediaStore);

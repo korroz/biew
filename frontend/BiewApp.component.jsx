@@ -10,13 +10,13 @@ module.exports = React.createClass({
         return { hasMedia: mediaStore.hasMedia() };
     },
     componentDidMount: function () {
-        this.listenerDeregisters = [
+        this.subscriptions = [
             mediaStore.onChange(this.onMediaChange)
         ];
     },
     componentWillUnmount: function () {
-        this.listenerDeregisters.forEach(function (deregister) {
-            deregister();
+        this.subscriptions.forEach(function (sub) {
+            sub.dispose();
         });
     },
     render: function () {

@@ -11,13 +11,13 @@ module.exports = React.createClass({
         return { media: cursorStore.current(), sliding: slideStore.isSliding() };
     },
     componentDidMount: function () {
-        this.listenerDeregisters = [
+        this.subscriptions = [
             cursorStore.onChange(this.getMedia),
             slideStore.onChange(this.areWeSliding)
         ];
     },
     componentWillUnmount: function () {
-        this.listenerDeregisters.forEach(function (deregister) { deregister(); });
+        this.subscriptions.forEach(function (sub) { sub.dispose(); });
     },
     render: function () {
         if (this.state.sliding)

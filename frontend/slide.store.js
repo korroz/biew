@@ -1,11 +1,12 @@
-var EventEmitter = require('events');
-var util = require('util');
+var Rx = require('rx');
 var dispatcher = require('./dispatcher');
 
+module.exports = new SlideStore();
+
 function SlideStore() {
-    EventEmitter.call(this);
     var self = this;
 
+    var _changeSubject = new Rx.Subject();
     var _started = false;
 
     self.start = start;
@@ -16,24 +17,23 @@ function SlideStore() {
     dispatcher.register(_actionHandler);
 
     function start() {
-        _started = true;
-        self.emit('change');
+        _play(true);
     }
     function stop() {
-        _started = false;
-        self.emit('change');
+        _play(false);
     }
     function isSliding() {
         return _started;
     }
 
     function onChange(listener) {
-        self.on('change', listener);
-        return function () {
-            self.removeListener('change', listener);
-        };
+        return _changeSubject.subscribe(listener);
     }
 
+    function _play(state) {
+        _started = !!state;
+        _changeSubject.onNext();
+    }
     function _actionHandler(payload) {
         switch (payload.actionType) {
             case 'slide:start':
@@ -45,6 +45,3 @@ function SlideStore() {
         }
     }
 }
-util.inherits(SlideStore, EventEmitter);
-
-module.exports = new SlideStore();

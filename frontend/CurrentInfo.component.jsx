@@ -8,13 +8,13 @@ module.exports = React.createClass({
         return this.makeState();
     },
     componentDidMount: function () {
-        this.listenerDeregisters = [
+        this.subscriptions = [
             cursorStore.onChange(this.onCursorChange)
         ];
     },
     componentWillUnmount: function () {
-        this.listenerDeregisters.forEach(function (deregister) {
-            deregister();
+        this.subscriptions.forEach(function (sub) {
+            sub.dispose();
         });
     },
     render: function () {
