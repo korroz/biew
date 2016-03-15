@@ -19,9 +19,14 @@ function SlideStore() {
     dispatcher.register(_actionHandler);
 
     function start() {
+        if (!_started) {
+            _timer.dispose();
+            _timer = Rx.Observable.timer(2000, 2000).subscribe(function () { actions.nextMedia(); });
+        }
         _play(true);
     }
     function stop() {
+        _timer.dispose();
         _play(false);
     }
     function isSliding() {
@@ -32,11 +37,11 @@ function SlideStore() {
         return _changeSubject.subscribe(listener);
     }
 
-    function _play(state) {
-        _started = !!state;
-        _timer.dispose();
-        if (_started) _timer = Rx.Observable.timer(2000, 2000).subscribe(function () { actions.nextMedia(); });
-        _changeSubject.onNext();
+    function _play(play) {
+        if (play !== _started) {
+            _started = play;
+            _changeSubject.onNext();
+        }
     }
     function _actionHandler(payload) {
         switch (payload.actionType) {
