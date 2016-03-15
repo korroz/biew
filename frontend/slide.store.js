@@ -1,5 +1,6 @@
 var Rx = require('rx');
 var dispatcher = require('./dispatcher');
+var actions = require('./actions');
 
 module.exports = new SlideStore();
 
@@ -8,6 +9,7 @@ function SlideStore() {
 
     var _changeSubject = new Rx.Subject();
     var _started = false;
+    var _timer = Rx.Disposable.empty;
 
     self.start = start;
     self.stop = stop;
@@ -32,6 +34,8 @@ function SlideStore() {
 
     function _play(state) {
         _started = !!state;
+        _timer.dispose();
+        if (_started) _timer = Rx.Observable.timer(2000, 2000).subscribe(function () { actions.nextMedia(); });
         _changeSubject.onNext();
     }
     function _actionHandler(payload) {

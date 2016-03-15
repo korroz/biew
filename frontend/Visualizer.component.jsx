@@ -8,34 +8,20 @@ var actions = require('./actions');
 module.exports = React.createClass({
     displayName: 'Visualizer',
     getInitialState: function () {
-        return { media: cursorStore.current(), sliding: slideStore.isSliding() };
+        return { media: cursorStore.current() };
     },
     componentDidMount: function () {
         this.subscriptions = [
-            cursorStore.onChange(this.getMedia),
-            slideStore.onChange(this.areWeSliding)
+            cursorStore.onChange(this.getMedia)
         ];
     },
     componentWillUnmount: function () {
         this.subscriptions.forEach(function (sub) { sub.dispose(); });
     },
     render: function () {
-        if (this.state.sliding)
-            this.startTimer();
         if (this.state.media.type === 'vid')
             return <VidView file={this.state.media.name} />;
         return <ImgView file={this.state.media.name} />;
     },
-    getMedia: function () { this.setState({ media: cursorStore.current() }); },
-    areWeSliding: function () {
-        this.stopTimer();
-        this.setState({ sliding: slideStore.isSliding() });
-    },
-    startTimer: function () {
-        this.stopTimer();
-        this.timer = setTimeout(function () { actions.nextMedia(); this.timer = null; }, 2000);
-    },
-    stopTimer: function () {
-        if (this.timer) clearTimeout(this.timer);
-    }
+    getMedia: function () { this.setState({ media: cursorStore.current() }); }
 });
