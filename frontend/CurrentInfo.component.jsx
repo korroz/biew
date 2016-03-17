@@ -20,8 +20,8 @@ module.exports = React.createClass({
     render: function () {
         return (
             <div className="current-info">
-                <div className="info file-info"><PinnableInfo info={this.state.file} /></div>
-                <div className="info position-info"><PinnableInfo info={this.state.position.current + '/' + this.state.position.total} /></div>
+                <div className="info file-info"><PinnableInfo pinPosition="left" info={this.state.file} /></div>
+                <div className="info position-info"><PinnableInfo pinPosition="right" info={this.state.position.current + '/' + this.state.position.total} /></div>
             </div>
         );
     },

@@ -15,8 +15,8 @@ module.exports = React.createClass({
     render: function () {
         return (
             <div className="controls">
-                <div className="control prev-control" onClick={this.clickPrev}><i className="fa fa-chevron-left fa-5x"></i></div>
-                <div className="control next-control" onClick={this.clickNext}><i className="fa fa-chevron-right fa-5x"></i></div>
+                <div className="control" onClick={this.clickPrev}><i className="fa fa-chevron-left fa-5x"></i></div>
+                <div className="control" onClick={this.clickNext}><i className="fa fa-chevron-right fa-5x"></i></div>
             </div>
         );
     },

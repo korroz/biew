@@ -6,11 +6,13 @@ module.exports = React.createClass({
         return { pinned: false };
     },
     render: function () {
+        var leftAlign = this.props.pinPosition === 'left';
         var pinCss = ['fa', 'fa-thumb-tack'];
         if (!this.state.pinned) pinCss.push('fa-rotate-90');
-        var pin = <span className="pin-button" style={{ marginLeft: 15 }} onClick={this.onPinClick}><i className={pinCss.join(' ')}></i></span>;
+        var pin = <span key="pin" className="pin-button" style={leftAlign ? { marginRight: 15 } : { marginLeft: 15 }} onClick={this.onPinClick}><i className={pinCss.join(' ')}></i></span>;
+        var info = <span key="info">{this.props.info}</span>;
         return (
-            <span className={this.state.pinned ? 'pinned' : 'unpinned'}>{this.props.info}{pin}</span>
+            <span className={this.state.pinned ? 'pinned' : 'unpinned'}>{leftAlign ? [pin, info] : [info, pin]}</span>
         );
     },
     onPinClick: function () {
