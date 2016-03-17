@@ -8,55 +8,60 @@ function SlideStore() {
     var self = this;
 
     var _started = false;
-    var _timer = Rx.Disposable.empty;
-    var _ready = new Rx.Subject();
-    var _change = new Rx.Subject();
-    var _slideStream = dispatcher.observable()
+
+    /* Marble sketch of the involved streams.
+    cursor  ----n---------n------------------
+    slide   ----s---------s------------------
+    control ------w------c-------------------
+    timer   ----------d---------d------------
+    output  -------------n------n------------
+    */
+    var _cursor = dispatcher.observable()
         .pluck('actionType')
-        .map(function (a) { return a.split(':'); })
-        .filter(function (a) { return a[0] === 'cursor' && (a[1] === 'next' || a[1] === 'prev'); })
-        .startWith(null)
-        .flatMapLatest(function (v, i) {
-            console.log('flatMap Slide', i);
-            return Rx.Observable.timer(2000)
-                .do(function () { console.log('Timer done!'); })
-                .combineLatest(_ready)
+        .map(function (at) { var s = at.split(':'); return { thing: s[0], action: s[1] }; })
+        .filter(function (a) { return a.thing === 'cursor' && (a.action === 'next' || a.action === 'prev'); });
+    var _slideSubject = new Rx.Subject();
+    var _slide = _slideSubject.observeOn(Rx.Scheduler.default);
+    var _control = new Rx.Subject();
+    var _output = _cursor
+        .startWith('start')
+        .flatMapLatest(function () {
+            var timer = Rx.Observable.timer(2000);
+            return _control
+                .startWith(null)
+                .do(function (c) { if (c === null) _slideSubject.onNext(); })
+                .combineLatest(timer, function (c) { return c; })
+                .filter(function (c) { return c === null || c === 'continue'; })
+                .map(function () { return 'next'; })
                 .take(1);
-        })
-        .share();
+        });
+    var _sub = Rx.Disposable.empty;
+
 
     self.start = start;
     self.stop = stop;
-    self.ready = ready;
-    self.onChange = onChange;
+    self.wait = wait;
+    self.continue = continueFn;
+    self.controlObservable = controlObservable;
 
     dispatcher.register(_actionHandler);
 
     function start() {
-        console.log('Start slideshow.');
-        _timer.dispose();
-        _timer = _slideStream.subscribe(function () { actions.nextMedia(); });
+        if (!_started)
+            _sub = _output.subscribe(function () { actions.nextMedia(); });
         _play(true);
     }
 
     function stop() {
-        _timer.dispose();
+        _sub.dispose();
         _play(false);
     }
 
-    function ready() {
-        console.log('Ready!');
-        _ready.onNext();
-    }
+    function wait() { _control.onNext('wait'); }
+    function continueFn() { _control.onNext('continue'); }
+    function controlObservable() { return _slide; }
 
-    function onChange(listener) {
-        return _change.subscribe(listener);
-    }
-
-    function _play(play) {
-        _started = play;
-        _change.onNext(_started);
-    }
+    function _play(play) { _started = play; }
 
     function _actionHandler(payload) {
         switch (payload.actionType) {
