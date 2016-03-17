@@ -8,6 +8,7 @@ function SlideStore() {
     var self = this;
 
     var _started = false;
+    var _startedSubject = new Rx.BehaviorSubject(_started);
 
     /* Marble sketch of the involved streams.
     cursor  ----n---------n------------------
@@ -37,12 +38,12 @@ function SlideStore() {
         });
     var _sub = Rx.Disposable.empty;
 
-
     self.start = start;
     self.stop = stop;
     self.wait = wait;
     self.continue = continueFn;
     self.controlObservable = controlObservable;
+    self.startedObservable = startedObservable;
 
     dispatcher.register(_actionHandler);
 
@@ -60,8 +61,13 @@ function SlideStore() {
     function wait() { _control.onNext('wait'); }
     function continueFn() { _control.onNext('continue'); }
     function controlObservable() { return _slide; }
+    function startedObservable() { return _startedSubject.asObservable(); }
 
-    function _play(play) { _started = play; }
+    function _play(play) {
+        if (play !== _started)
+            _startedSubject.onNext(play);
+        _started = play;
+    }
 
     function _actionHandler(payload) {
         switch (payload.actionType) {

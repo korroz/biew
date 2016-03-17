@@ -3,12 +3,13 @@ var slideStore = require('./slide.store')
 
 module.exports = React.createClass({
     displayName: 'VidView',
+    getInitialState: function () {
+        return { slideStarted: false };
+    },
     componentDidMount: function () {
         this.subs = [
-            slideStore.controlObservable()
-                .do(function () { slideStore.wait(); })
-                .delay(5000)
-                .subscribe(function () { slideStore.continue(); })
+            slideStore.controlObservable().subscribe(slideStore.wait),
+            slideStore.startedObservable().subscribe(this.onSlideStartedChange)
         ];
     },
     componentWillUnmount: function () {
@@ -18,8 +19,17 @@ module.exports = React.createClass({
         var output;
 
         if (this.props.file) {
+            var attr = {};
+            if (this.state.slideStarted) attr.onEnded = this.onVideoEnd;
             output = (
-                <video className="keep-aspect-maximize" src={'api/file/' + this.props.file} autoPlay loop controls muted>
+                <video
+                    {...attr}
+                    className="keep-aspect-maximize"
+                    src={'api/file/' + this.props.file}
+                    autoPlay
+                    loop={!this.state.slideStarted}
+                    controls
+                    muted>
                     There should be a video playing here, but seems it doesn't work.
                 </video>
             );
@@ -27,5 +37,13 @@ module.exports = React.createClass({
         else
             output = <div>No image</div>;
         return output;
+    },
+    onSlideStartedChange: function (started) {
+        this.setState({ slideStarted: started });
+    },
+    onVideoEnd: function (e) {
+        slideStore.continue();
+        e.target.currentTime = 0;
+        e.target.play();
     }
 });
