@@ -66,3 +66,36 @@ body {
 .current-info .info:hover .unpinned { opacity: 1; }
 
 .pin-button { cursor: pointer; }
+
+.aux-panel-container {
+    position: absolute;
+    top: 0;
+    right: 300px;
+    left: 300px;
+    display: flex;
+    justify-content: center;
+}
+.aux-panel {
+    display: flex;
+    justify-content: space-between;
+    background-color: hsla(0, 100%, 100%, 0.8);
+    border-top: none;
+    color: #333;
+    padding: 0 10px 10px;
+}
+
+.aux-panel fieldset {
+    margin: 0;
+}
+
+.aux-panel legend {
+    font-size: 11px;
+    margin-right: 10px;
+}
+
+.aux-panel button {
+    padding: 0 10px;
+    height: 25px;
+    line-height: 25px;
+    margin: 0 5px 0 0;
+}

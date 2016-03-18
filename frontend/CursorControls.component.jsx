@@ -6,11 +6,9 @@ module.exports = React.createClass({
     componentDidMount: function () {
         Mousetrap.bind('left', this.clickPrev);
         Mousetrap.bind('right', this.clickNext);
-        Mousetrap.bind('up', this.startSlide);
-        Mousetrap.bind('down', this.stopSlide);
     },
     componentWillUnmount: function () {
-        Mousetrap.unbind(['left', 'right', 'up', 'down']);
+        Mousetrap.unbind(['left', 'right']);
     },
     render: function () {
         return (
