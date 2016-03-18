@@ -1,7 +1,7 @@
 var React = require('react');
 var SlideStartStopButton = require('./SlideStartStopButton.component.jsx');
 var PinInfoUIButton = require('./PinInfoUIButton.component.jsx');
-var settingsStore = require('./settings.store');
+var actions = require('./actions.js');
 
 module.exports = React.createClass({
     displayName: 'AuxControls',
@@ -12,7 +12,7 @@ module.exports = React.createClass({
                     <fieldset>
                         <legend>slideshow:</legend>
                         <SlideStartStopButton />
-                        <button><i className="fa fa-cog"></i></button>
+                        <button onClick={this.slideShowSettings}><i className="fa fa-cog"></i></button>
                     </fieldset>
                     <fieldset>
                         <legend>info:</legend>
@@ -21,5 +21,8 @@ module.exports = React.createClass({
                 </div>
             </div>
         );
+    },
+    slideShowSettings: function () {
+        actions.showRightPanel(<div>Slide show settings</div>);
     }
 });

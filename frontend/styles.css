@@ -19,6 +19,27 @@ body {
     bottom: 0;
     left: 0;
 }
+.with-right-panel .viewer {
+    right: 300px;
+}
+
+.right-panel {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 297px;
+    background-color: white;
+    color: #333;
+    padding-left: 3px;
+}
+.with-right-panel .right-panel {
+    display: block;
+}
+
+.right-panel h2 { cursor: pointer; }
+.right-panel h2:hover { opacity: 0.3; }
 
 .keep-aspect-maximize {
     display: block;

@@ -1,18 +1,21 @@
 var React = require('react');
+var actions = require('./actions');
 var Visualizer = require('./Visualizer.component.jsx');
 var CursorControls = require('./CursorControls.component.jsx');
 var CurrentInfo = require('./CurrentInfo.component.jsx');
 var AuxControls = require('./AuxControls.component.jsx');
 var mediaStore = require('./media.store.js');
+var uiStore = require('./ui.store.js');
 
 module.exports = React.createClass({
     displayName: 'BiewApp',
     getInitialState: function () {
-        return { hasMedia: mediaStore.hasMedia() };
+        return { hasMedia: mediaStore.hasMedia(), rightPanel: null };
     },
     componentDidMount: function () {
         this.subscriptions = [
-            mediaStore.onChange(this.onMediaChange)
+            mediaStore.onChange(this.onMediaChange),
+            uiStore.rightPanelObservable().subscribe(this.rightPanel)
         ];
     },
     componentWillUnmount: function () {
@@ -33,15 +36,27 @@ module.exports = React.createClass({
                 </div>
             );
         return (
-            <div className="viewer">
-                <Visualizer />
-                <CurrentInfo />
-                <CursorControls />
-                <AuxControls />
+            <div className={this.state.rightPanel && 'with-right-panel'}>
+                <div className="viewer">
+                    <Visualizer />
+                    <CurrentInfo />
+                    <CursorControls />
+                    <AuxControls />
+                </div>
+                <div className="right-panel">
+                    <h2 onClick={this.hideRightPanel}><i className="fa fa-caret-right"></i> side panel</h2>
+                    {this.state.rightPanel}
+                </div>
             </div>
         );
     },
     onMediaChange: function () {
         this.setState({ hasMedia: mediaStore.hasMedia() });
+    },
+    rightPanel: function (content) {
+        this.setState({ rightPanel: content });
+    },
+    hideRightPanel: function () {
+        actions.hideRightPanel();
     }
 });

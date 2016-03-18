@@ -10,6 +10,8 @@ function Actions(dispatcher)
     self.prevMedia = prevMedia;
     self.startSlide = startSlide;
     self.stopSlide = stopSlide;
+    self.showRightPanel = showRightPanel;
+    self.hideRightPanel = hideRightPanel;
 
     function nextMedia() {
         dispatcher.dispatch({ actionType: 'cursor:next' });
@@ -22,5 +24,11 @@ function Actions(dispatcher)
     }
     function stopSlide() {
         dispatcher.dispatch({ actionType: 'slide:stop' });
+    }
+    function showRightPanel(jsx) {
+        dispatcher.dispatch({ actionType: 'right-panel:show', content: jsx });
+    }
+    function hideRightPanel() {
+        dispatcher.dispatch({ actionType: 'right-panel:hide' });
     }
 }
