@@ -2,7 +2,7 @@ var React = require('react');
 var settingsStore = require('./settings.store');
 
 module.exports = React.createClass({
-    displayName: 'PinnableInfo',
+    displayName: 'PinInfoUIButton',
     getInitialState: function () {
         return { pinned: false };
     },
@@ -15,9 +15,13 @@ module.exports = React.createClass({
         this.subs.forEach(function (sub) { sub.dispose(); });
     },
     render: function () {
-        return (
-            <span className={this.state.pinned ? 'pinned' : 'unpinned'}>{this.props.info}</span>
-        );
+        var css = ['fa', 'fa-thumb-tack', this.state.pinned ? '' : 'fa-rotate-90'].join(' ');
+        return <button onClick={this.pin}><i className={css}></i></button>
     },
-    setPinned: function (pinned) { this.setState({ pinned: pinned }); }
+    setPinned: function (pinned) {
+        this.setState({ pinned: pinned });
+    },
+    pin: function () {
+        settingsStore.togglePinInfoUI();
+    }
 });

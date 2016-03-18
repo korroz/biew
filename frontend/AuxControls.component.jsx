@@ -1,5 +1,7 @@
 var React = require('react');
 var SlideStartStopButton = require('./SlideStartStopButton.component.jsx');
+var PinInfoUIButton = require('./PinInfoUIButton.component.jsx');
+var settingsStore = require('./settings.store');
 
 module.exports = React.createClass({
     displayName: 'AuxControls',
@@ -14,7 +16,7 @@ module.exports = React.createClass({
                     </fieldset>
                     <fieldset>
                         <legend>info:</legend>
-                        <button><i className="fa fa-thumb-tack fa-rotate-90"></i></button>
+                        <PinInfoUIButton />
                     </fieldset>
                 </div>
             </div>
