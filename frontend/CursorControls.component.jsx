@@ -13,8 +13,8 @@ module.exports = React.createClass({
     render: function () {
         return (
             <div className="controls">
-                <div className="control" onClick={this.clickPrev}><i className="fa fa-chevron-left fa-5x"></i></div>
-                <div className="control" onClick={this.clickNext}><i className="fa fa-chevron-right fa-5x"></i></div>
+                <div className="control" onClick={this.clickPrev} title="left arrow"><i className="fa fa-chevron-left fa-5x"></i></div>
+                <div className="control" onClick={this.clickNext} title="right arrow"><i className="fa fa-chevron-right fa-5x"></i></div>
             </div>
         );
     },

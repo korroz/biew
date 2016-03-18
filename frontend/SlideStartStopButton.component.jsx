@@ -19,7 +19,7 @@ module.exports = React.createClass({
     },
     render: function () {
         var css = ['fa', this.state.started ? 'fa-stop' : 'fa-play'].join(' ');
-        return <button onClick={this.startStop}><i className={css}></i></button>;
+        return <button onClick={this.startStop} title="up arrow"><i className={css}></i></button>;
     },
     onStartedChange: function (started) {
         this.setState({ started: started });
