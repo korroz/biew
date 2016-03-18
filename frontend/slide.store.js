@@ -1,4 +1,5 @@
 var Rx = require('rx');
+var settingsStore = require('./settings.store.js');
 var dispatcher = require('./dispatcher');
 var actions = require('./actions');
 
@@ -27,7 +28,7 @@ function SlideStore() {
     var _output = _cursor
         .startWith('start')
         .flatMapLatest(function () {
-            var timer = Rx.Observable.timer(2000);
+            var timer = Rx.Observable.timer(settingsStore.getSlideDelay());
             return _control
                 .startWith(null)
                 .do(function (c) { if (c === null) _slideSubject.onNext(); })

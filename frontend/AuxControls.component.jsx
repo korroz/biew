@@ -1,6 +1,7 @@
 var React = require('react');
 var SlideStartStopButton = require('./SlideStartStopButton.component.jsx');
 var PinInfoUIButton = require('./PinInfoUIButton.component.jsx');
+var SlideSettings = require('./SlideSettings.component.jsx');
 var actions = require('./actions.js');
 
 module.exports = React.createClass({
@@ -23,6 +24,6 @@ module.exports = React.createClass({
         );
     },
     slideShowSettings: function () {
-        actions.showRightPanel(<div>Slide show settings</div>);
+        actions.showRightPanel(<SlideSettings />);
     }
 });
