@@ -74,7 +74,9 @@ body {
     left: 300px;
     display: flex;
     justify-content: center;
+    opacity: 0;
 }
+.aux-panel-container:hover { opacity: 1; }
 .aux-panel {
     display: flex;
     justify-content: space-between;
