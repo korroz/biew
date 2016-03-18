@@ -101,3 +101,6 @@ body {
     line-height: 25px;
     margin: 0 5px 0 0;
 }
+.aux-panel button i {
+    width: 15px;
+}
