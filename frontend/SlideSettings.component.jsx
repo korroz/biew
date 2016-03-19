@@ -18,7 +18,11 @@ module.exports = React.createClass({
     render: function () {
         return (
             <fieldset>
-                <legend>Slide settings:</legend>
+                <legend>Slide settings</legend>
+                <p>
+                    The slideshow waits for the <em>Delay</em> duration and, if a video is displayed, that it has
+                    played at least once, before moving forward.
+                </p>
                 <label htmlFor="delay">Delay (ms)</label>
                 <input name="delay" onChange={this.onDelayChange} type="number" min="1000" max="60000" value={this.state.delay} step="1000" />
             </fieldset>
