@@ -20,7 +20,7 @@ function MediaStore() {
 
     function activate() {
         api.getMedia()
-            .then(function (media) {
+            .subscribe(function (media) {
                 _media = media;
                 _changeSubject.onNext();
             });

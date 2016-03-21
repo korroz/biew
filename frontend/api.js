@@ -1,23 +1,22 @@
 var xhr = require('xhr');
-var q = require('q');
+var Rx = require('rx');
 
-module.exports = new API(xhr, q);
+module.exports = new API(xhr, Rx);
 
-function API(xhr, q) {
+function API(xhr, Rx) {
     var self = this;
+
+    var xhrRx = Rx.Observable.fromCallback(xhr, null, function (err, response, body) {
+        if (err) throw err;
+        return response;
+    });
 
     self.getMedia = getMedia;
 
     function getMedia() {
-        return q.Promise(function (resolve, reject) {
-            xhr('api/media', function (err, response) {
-                if (err)
-                    reject(err);
-                else if (response.statusCode === 200)
-                    resolve(JSON.parse(response.body));
-                else
-                    reject(response);
-            });
+        return xhrRx('api/media').map(function (response) {
+            if (response.statusCode !== 200) throw response;
+            return JSON.parse(response.body);
         });
     }
 }
