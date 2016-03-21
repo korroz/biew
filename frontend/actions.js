@@ -8,6 +8,7 @@ function Actions(dispatcher)
 
     self.nextMedia = nextMedia;
     self.prevMedia = prevMedia;
+    self.shuffleMedia = shuffleMedia;
     self.startSlide = startSlide;
     self.stopSlide = stopSlide;
     self.showRightPanel = showRightPanel;
@@ -18,6 +19,9 @@ function Actions(dispatcher)
     }
     function prevMedia() {
         dispatcher.dispatch({ actionType: 'cursor:prev' });
+    }
+    function shuffleMedia() {
+        dispatcher.dispatch({ actionType: 'media:shuffle' });
     }
     function startSlide() {
         dispatcher.dispatch({ actionType: 'slide:start' });

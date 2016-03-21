@@ -16,6 +16,10 @@ module.exports = React.createClass({
                         <button onClick={this.slideShowSettings}><i className="fa fa-cog"></i></button>
                     </fieldset>
                     <fieldset>
+                        <legend>media</legend>
+                        <button onClick={this.clickShuffle}><i className="fa fa-random"></i></button>
+                    </fieldset>
+                    <fieldset>
                         <legend>info:</legend>
                         <PinInfoUIButton />
                     </fieldset>
@@ -25,5 +29,8 @@ module.exports = React.createClass({
     },
     slideShowSettings: function () {
         actions.showRightPanel(<SlideSettings />);
+    },
+    clickShuffle: function () {
+        actions.shuffleMedia();
     }
 });

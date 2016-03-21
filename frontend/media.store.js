@@ -1,4 +1,5 @@
 var Rx = require('rx');
+var dispatcher = require('./dispatcher.js');
 var api = require('./api');
 
 module.exports = new MediaStore();
@@ -14,15 +15,19 @@ function MediaStore() {
     self.hasMedia = hasMedia;
     self.isSpecial = function () { return !!_media.isSpecial; }
     self.onChange = onChange;
+    self.observable = observable;
 
+    dispatcher.observable()
+        .filter(function (payload) { return payload.actionType === 'media:shuffle'; })
+        .subscribe(shuffleMedia);
 
-    activate();
+    _activate();
 
-    function activate() {
+    function _activate() {
         api.getMedia()
             .subscribe(function (media) {
                 _media = media;
-                _changeSubject.onNext();
+                _changeSubject.onNext(media);
             });
     }
 
@@ -40,5 +45,22 @@ function MediaStore() {
 
     function onChange(listener) {
         return _changeSubject.subscribe(listener);
+    }
+
+    function observable() {
+        return _changeSubject.asObservable();
+    }
+
+    function shuffleMedia() {
+        var r = function (max) { return Math.floor(Math.random() * (max + 1)); };
+        var files = _media.files;
+
+        for (var i = files.length - 1; i > 0 ; i--) {
+            var swp = files[i];
+            var rnd = r(i - 1);
+            files[i] = files[rnd];
+            files[rnd] = swp;
+        }
+        _changeSubject.onNext(_media);
     }
 }

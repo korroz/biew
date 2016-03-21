@@ -17,6 +17,7 @@ function CursorStore(dispatcher, mediaStore) {
     this.next = next;
 
     dispatcher.register(_actionHandler);
+    mediaStore.observable().subscribe(function () { _changeBy(0); });
 
     function prev() {
         _changeBy(-1);

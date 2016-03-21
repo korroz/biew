@@ -20,6 +20,5 @@ module.exports = React.createClass({
     },
     clickPrev: function () { actions.prevMedia(); },
     clickNext: function () { actions.nextMedia(); },
-    startSlide: function () { actions.startSlide(); },
-    stopSlide: function () { actions.stopSlide(); }
+    clickShuffle: function () { actions.shuffleMedia(); }
 });
