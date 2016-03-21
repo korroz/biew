@@ -5,10 +5,14 @@ var biew = require('../backend');
 
 cli.parse({
     port: ['p', 'The port to use', 'number', 3434],
-    path: [false, 'Path to the media', 'path', './']
+    path: [false, 'Path to the media', 'path', './'],
+    serve: [false, 'Start only the backend without launching a browser']
 })
 cli.main(function (args, options) {
-    biew(options, function () {
-        open('http://localhost:' + options.port);
-    });
+    if (options.serve)
+        biew(options);
+    else
+        biew(options, function () {
+            open('http://localhost:' + options.port);
+        });
 });
