@@ -20,8 +20,13 @@ function SlideStore() {
     */
     var _cursor = dispatcher.observable()
         .pluck('actionType')
-        .map(function (at) { var s = at.split(':'); return { thing: s[0], action: s[1] }; })
-        .filter(function (a) { return a.thing === 'cursor' && (a.action === 'next' || a.action === 'prev'); });
+        .filter(function (a) {
+            return [
+                'cursor:prev',
+                'cursor:next',
+                'media:shuffle'
+            ].some(function (val) { return a === val });
+        });
     var _slideSubject = new Rx.Subject();
     var _slide = _slideSubject.observeOn(Rx.Scheduler.default);
     var _control = new Rx.Subject();
