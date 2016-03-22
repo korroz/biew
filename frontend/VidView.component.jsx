@@ -4,11 +4,11 @@ var slideStore = require('./slide.store')
 module.exports = React.createClass({
     displayName: 'VidView',
     getInitialState: function () {
-        return { slideStarted: false };
+        return { slideStarted: slideStore.getStarted() };
     },
     componentDidMount: function () {
         this.subs = [
-            slideStore.controlObservable().subscribe(slideStore.wait),
+            slideStore.controlObservable().filter(function (enabled) { return enabled; }).subscribe(slideStore.wait),
             slideStore.startedObservable().subscribe(this.onSlideStartedChange)
         ];
     },

@@ -13,7 +13,7 @@ function SlideStore() {
 
     /* Marble sketch of the involved streams.
     cursor  ----n---------n------------------
-    slide   ----s---------s------------------
+    slide   ----t--------ft-----f------------
     control ------w------c-------------------
     timer   ----------d---------d------------
     output  -------------n------n------------
@@ -27,7 +27,7 @@ function SlideStore() {
                 'media:shuffle'
             ].some(function (val) { return a === val });
         });
-    var _slideSubject = new Rx.Subject();
+    var _slideSubject = new Rx.BehaviorSubject(false);
     var _slide = _slideSubject.observeOn(Rx.Scheduler.default);
     var _control = new Rx.Subject();
     var _output = _cursor
@@ -36,9 +36,10 @@ function SlideStore() {
             var timer = Rx.Observable.timer(settingsStore.getSlideDelay());
             return _control
                 .startWith(null)
-                .do(function (c) { if (c === null) _slideSubject.onNext(); })
+                .do(function (c) { if (c === null) _slideSubject.onNext(true); })
                 .combineLatest(timer, function (c) { return c; })
                 .filter(function (c) { return c === null || c === 'continue'; })
+                .do(function () { _slideSubject.onNext(false); })
                 .map(function () { return 'next'; })
                 .take(1);
         });
@@ -48,6 +49,7 @@ function SlideStore() {
     self.stop = stop;
     self.wait = wait;
     self.continue = continueFn;
+    self.getStarted = getStarted;
     self.controlObservable = controlObservable;
     self.startedObservable = startedObservable;
 
@@ -66,6 +68,7 @@ function SlideStore() {
 
     function wait() { _control.onNext('wait'); }
     function continueFn() { _control.onNext('continue'); }
+    function getStarted() { return _started; }
     function controlObservable() { return _slide; }
     function startedObservable() { return _startedSubject.asObservable(); }
 
